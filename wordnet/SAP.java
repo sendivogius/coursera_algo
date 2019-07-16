@@ -5,48 +5,41 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class SAP {
     private final Digraph digraph;
+    private final int nV;
+    private Iterable<Integer> lastV;
+    private Iterable<Integer> lastW;
+    private ArrayList<Integer> cachedResult;
+
 
     public SAP(Digraph G) {
         if (G == null)
             throw new IllegalArgumentException();
         digraph = new Digraph(G);
+        nV = G.V();
     }
 
-    private boolean isValidNode(int node) {
-        return node >= 0 && node < digraph.V();
+    private boolean isValidNode(Integer node) {
+        return node != null && node >= 0 && node < nV;
     }
 
     private ArrayList<Integer> getShortestAncestors(int v, int w) {
-        HashMap<Integer, Integer> ancestorsV = getAncestors(v);
-        HashMap<Integer, Integer> ancestorsW = getAncestors(w);
-        int lastCommon = -1;
-        int lastCommonDist = Integer.MAX_VALUE;
-        for (int i : ancestorsV.keySet()) {
-            if (!ancestorsW.containsKey(i))
-                continue;
-            int distBy = ancestorsV.get(i) + ancestorsW.get(i);
-            if (distBy < lastCommonDist) {
-                lastCommonDist = distBy;
-                lastCommon = i;
-            }
-        }
-
-        ArrayList<Integer> ret = new ArrayList<>();
-        ret.add(lastCommon);
-        ret.add(lastCommon == -1 ? -1 : lastCommonDist);
-        return ret;
+        return getShortestAncestors(Collections.singletonList(v),
+                                    Collections.singletonList(w));
     }
 
-    private HashMap<Integer, Integer> getAncestors(int node) {
-        if (!isValidNode(node))
-            throw new IllegalArgumentException();
-        BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(digraph, node);
+    private HashMap<Integer, Integer> getAncestors(Iterable<Integer> nodes) {
+        for (Integer i : nodes)
+            if (!isValidNode(i)) throw new IllegalArgumentException();
+
+        BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(digraph, nodes);
         HashMap<Integer, Integer> ancestors = new HashMap<Integer, Integer>();
-        for (int i = 0; i < digraph.V(); i++)
+        for (int i = 0; i < nV; i++)
             if (bfs.hasPathTo(i))
                 ancestors.put(i, bfs.distTo(i));
         return ancestors;
@@ -66,26 +59,31 @@ public class SAP {
         if (v == null || w == null)
             throw new IllegalArgumentException();
 
-        ArrayList<Integer> minLength = new ArrayList<>();
-        minLength.add(-1);
-        minLength.add(Integer.MAX_VALUE);
-        for (Integer v1 : v) {
-            if (v1 == null || !isValidNode(v1))
-                throw new IllegalArgumentException();
-            for (Integer w1 : w) {
-                if (w1 == null || !isValidNode(w1))
-                    throw new IllegalArgumentException();
-                ArrayList<Integer> v1w1 = getShortestAncestors(v1, w1);
-                if (v1w1.get(0) != -1 && v1w1.get(1) < minLength.get(1)) {
-                    minLength = v1w1;
-                }
+        if (v.equals(lastV) && w.equals(lastW) && cachedResult != null)
+            return cachedResult;
+
+        HashMap<Integer, Integer> ancestorsV = getAncestors(v);
+        HashMap<Integer, Integer> ancestorsW = getAncestors(w);
+        int lastCommon = -1;
+        int lastCommonDist = Integer.MAX_VALUE;
+        for (int i : ancestorsV.keySet()) {
+            if (!ancestorsW.containsKey(i))
+                continue;
+            int distBy = ancestorsV.get(i) + ancestorsW.get(i);
+            if (distBy < lastCommonDist) {
+                lastCommonDist = distBy;
+                lastCommon = i;
             }
         }
-        if (minLength.get(0) == -1) {
-            minLength.remove(1);
-            minLength.add(-1);
-        }
-        return minLength;
+
+        cachedResult = new ArrayList<>();
+        cachedResult.add(lastCommon);
+        cachedResult.add(lastCommon == -1 ? -1 : lastCommonDist);
+
+        lastV = v;
+        lastW = w;
+
+        return cachedResult;
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
@@ -103,15 +101,15 @@ public class SAP {
         Digraph G = new Digraph(in);
         SAP sap = new SAP(G);
 
-        // int length = sap.length(Arrays.asList(13, 23, 24), Arrays.asList(6, 16, 17));
-        // int ancestor = sap.ancestor(Arrays.asList(13, 23, 24), Arrays.asList(6, 16, 17));
-        // StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
+        int length = sap.length(Arrays.asList(13, 23, null, 24), Arrays.asList(6, 16, 17));
+        int ancestor = sap.ancestor(Arrays.asList(13, 23, 24), Arrays.asList(6, 16, 17));
+        StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
 
         while (!StdIn.isEmpty()) {
             int v = StdIn.readInt();
             int w = StdIn.readInt();
-            int length = sap.length(v, w);
-            int ancestor = sap.ancestor(v, w);
+            length = sap.length(v, w);
+            ancestor = sap.ancestor(v, w);
             StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
         }
     }
