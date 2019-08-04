@@ -20,13 +20,21 @@ public class PrintEnergy {
         
         SeamCarver sc = new SeamCarver(picture);
         
-        StdOut.printf("Printing energy calculated for each pixel.\n");        
+        StdOut.printf("Printing energy calculated for each pixel.\n");
 
-        for (int row = 0; row < sc.height(); row++) {
-            for (int col = 0; col < sc.width(); col++)
-                StdOut.printf("%9.0f ", sc.energy(col, row));
-            StdOut.println();
-        }
+        // sc.energyDebug();
+
+        int[] seam = new int[] {2, 1, 2, 3, 2, 3, 4, 5, 6, 7};
+        sc.removeVerticalSeam(seam);
+
+        StdOut.printf("Removed seam, recal optm.\n");
+        sc.energyDebug();
+
+        StdOut.printf("Removed seam, recal everyhtin.\n");
+        SeamCarver sc2 = new SeamCarver(sc.picture());
+
+        sc2.energyDebug();
+
     }
 
 }
