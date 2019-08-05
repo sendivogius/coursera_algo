@@ -1,13 +1,14 @@
 import edu.princeton.cs.algs4.Picture;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
-import java.awt.Color;
+import java.util.Arrays;
 
 public class SeamCarver {
     private int width;
     private int height;
     private double[][] energy;
-    private Color[][] img;
+    private int[][] imgRGB;
     private boolean isTransposed;
 
     public SeamCarver(Picture picture) {
@@ -18,18 +19,19 @@ public class SeamCarver {
         height = picture.height();
         isTransposed = false;
         pictureToColors(picture);
+        energy = new double[width][height];
         colorsToEnergy();
     }
 
     private void pictureToColors(Picture picture) {
-        img = new Color[width][height];
+        imgRGB = new int[width][height];
         for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-                img[i][j] = new Color(picture.getRGB(i, j));
+            for (int j = 0; j < height; j++) {
+                imgRGB[i][j] = picture.getRGB(i, j);
+            }
     }
 
     private void colorsToEnergy() {
-        energy = new double[width][height];
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
                 energy[i][j] = energy(i, j);
@@ -40,45 +42,108 @@ public class SeamCarver {
         Picture pic = new Picture(width, height);
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
-                pic.set(i, j, img[i][j]);
+                pic.setRGB(i, j, imgRGB[i][j]);
         return pic;
     }
 
     public int width() {
+        makeHorizontal();
         return width;
     }
 
     public int height() {
+        makeHorizontal();
         return height;
     }
 
     public double energy(int x, int y) {
+        makeHorizontal();
         if (x < 0 || y < 0 || x >= width || y >= height)
             throw new IllegalArgumentException();
-        if (x == 0 || y == 0 || x == width() - 1 || y == height() - 1)
-            return 1000;
+
+        return calcEnergy(x, y);
+    }
+
+    private double calcEnergy(int x, int y) {
+        if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
+            return 1000.0;
         return Math.sqrt(energyBetween(x + 1, y, x - 1, y) + energyBetween(x, y + 1, x, y - 1));
     }
 
-    private double energyBetween(int x1, int y1, int x2, int y2) {
-        Color rgb1 = img[x1][y1];
-        Color rgb2 = img[x2][y2];
+    private int energyBetween(int x1, int y1, int x2, int y2) {
+        int rgb1 = imgRGB[x1][y1];
+        int rgb2 = imgRGB[x2][y2];
 
-        double dr = rgb1.getRed() - rgb2.getRed();
-        double dg = rgb1.getGreen() - rgb2.getGreen();
-        double db = rgb1.getBlue() - rgb2.getBlue();
+        int dr = (rgb1 & 0xFF) - (rgb2 & 0xFF);
+        int dg = ((rgb1 >> 8) & 0xFF) - ((rgb2 >> 8) & 0xFF);
+        int db = ((rgb1 >> 16) & 0xFF) - ((rgb2 >> 16) & 0xFF);
 
         return dr * dr + dg * dg + db * db;
     }
 
     public int[] findHorizontalSeam() {
-        throw new IllegalArgumentException();
+        makeHorizontal();
+        return doFindHorizontalSeam();
+    }
+
+    private int[] doFindHorizontalSeam() {
+        int[] dys = { 0, -1, 1 };
+
+        // temp variables
+        double currentEnergy;
+        int[][] pred = new int[width][height];
+        double[][] shortestEnergy = new double[width][height];
+        for (double[] row : shortestEnergy)
+            Arrays.fill(row, Double.POSITIVE_INFINITY);
+        Arrays.fill(shortestEnergy[0], 1000);
+
+        // calculate shortest energies
+        for (int col = 1; col < width; col++)
+            for (int row = 0; row < height; row++) {
+                currentEnergy = energy[col][row];
+                int neigX = col - 1;
+                int neigY;
+                for (int dy : dys) {
+                    neigY = row + dy;
+                    if (neigY < 0 || neigY >= height)
+                        continue;
+                    double energyThrNeigh = currentEnergy + shortestEnergy[neigX][neigY];
+                    if (energyThrNeigh < shortestEnergy[col][row]) {
+                        shortestEnergy[col][row] = energyThrNeigh;
+                        pred[col][row] = neigY;
+                    }
+                }
+            }
+
+        // find minimum energy
+        double[] lastColEnergies = shortestEnergy[width - 1];
+        int minRow = 0;
+        for (int i = 1; i < height - 1; i++) {
+            if (lastColEnergies[i] < lastColEnergies[minRow])
+                minRow = i;
+        }
+
+        // track back path
+        Stack<Integer> path = new Stack<>();
+        path.push(minRow);
+        for (int currentCol = width - 1; currentCol > 0; currentCol--) {
+            minRow = pred[currentCol][minRow];
+            path.push(minRow);
+        }
+
+        int[] finalPath = new int[width];
+        for (int i = 0; i < width; i++)
+            finalPath[i] = path.pop();
+
+        return finalPath;
     }
 
     // sequence of indices for vertical seam
     public int[] findVerticalSeam() {
         makeVertical();
-        return findHorizontalSeam();
+        int[] seam = doFindHorizontalSeam();
+        // makeHorizontal();
+        return seam;
     }
 
 
@@ -88,27 +153,28 @@ public class SeamCarver {
         validateHorizontalSeam(seam);
 
         int newHeight = height - 1;
-        Color[][] newImg = new Color[width][newHeight];
+        int[][] newImg = new int[width][newHeight];
         double[][] newEnergy = new double[width][newHeight];
         for (int i = 0; i < seam.length; i++) {
             int delIdx = seam[i];
             int after = height - delIdx - 1;
-            System.arraycopy(img[i], 0, newImg[i], 0, delIdx);
-            System.arraycopy(img[i], delIdx + 1, newImg[i], delIdx, after);
+            System.arraycopy(imgRGB[i], 0, newImg[i], 0, delIdx);
+            System.arraycopy(imgRGB[i], delIdx + 1, newImg[i], delIdx, after);
 
             System.arraycopy(energy[i], 0, newEnergy[i], 0, delIdx);
             System.arraycopy(energy[i], delIdx + 1, newEnergy[i], delIdx, after);
         }
         height = newHeight;
         energy = newEnergy;
-        img = newImg;
+        imgRGB = newImg;
 
         for (int i = 0; i < seam.length; i++) {
-            energy[i][seam[i]] = energy(i, seam[i]);
-            energy[i][seam[i]-1] = energy(i, seam[i]-1);
+            if (seam[i] < height)
+                energy[i][seam[i]] = calcEnergy(i, seam[i]);
+            if (seam[i] > 0)
+                energy[i][seam[i] - 1] = calcEnergy(i, seam[i] - 1);
         }
     }
-
 
     public void removeHorizontalSeam(int[] seam) {
         makeHorizontal();
@@ -135,16 +201,16 @@ public class SeamCarver {
         int newHeight = width;
         int newWidth = height;
         double[][] newEnergy = new double[newWidth][newHeight];
-        Color[][] newImg = new Color[newWidth][newHeight];
+        int[][] newImg = new int[newWidth][newHeight];
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++) {
                 newEnergy[j][i] = energy[i][j];
-                newImg[j][i] = img[i][j];
+                newImg[j][i] = imgRGB[i][j];
             }
         width = newWidth;
         height = newHeight;
         energy = newEnergy;
-        img = newImg;
+        imgRGB = newImg;
         isTransposed = !isTransposed;
     }
 
@@ -165,25 +231,20 @@ public class SeamCarver {
 
     //  unit testing (optional)
     public static void main(String[] args) {
-        Picture picture = new Picture(args[0]);
+        Picture picture = new Picture("rand.png");
         StdOut.printf("%s (%d-by-%d image)\n", args[0], picture.width(), picture.height());
         picture.show();
 
-        int[] seam = new int[] { 8, 9, 10, 9, 8, 8, 8, 9, 9, 9, 9, 9 };
-
         SeamCarver sc = new SeamCarver(picture);
-        sc.removeVerticalSeam(seam);
-        Picture newP = sc.picture();
-        newP.show();
-    }
+        // sc.debugEnergy();
+        StdOut.println(sc.width());
+        StdOut.println(sc.width());
+        StdOut.println(sc.findVerticalSeam());
+        StdOut.println(sc.width());
+        StdOut.println(sc.width());
+        StdOut.println(sc.height());
+        StdOut.println(sc.width());
 
-    public void energyDebug() {
-        makeHorizontal();
-        for (int row = 0; row < height(); row++) {
-            for (int col = 0; col < width(); col++)
-                StdOut.printf("%9.0f ", energy[col][row]);
-            StdOut.println();
-        }
     }
 
 }
