@@ -1,6 +1,7 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.ST;
 import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdStats;
 
 
 public class BaseballElimination {
@@ -9,6 +10,8 @@ public class BaseballElimination {
     private int[] loses;
     private int[] remaining;
     private int[][] remainingAgainst;
+    private int maxWins;
+
 
     public BaseballElimination(String filename) {
         In in = new In(filename);
@@ -29,6 +32,7 @@ public class BaseballElimination {
                 remainingAgainst[i][j] = in.readInt();
             }
         }
+        maxWins = StdStats.max(wins);
     }
 
     public static void main(String[] args) {
@@ -53,16 +57,22 @@ public class BaseballElimination {
 
     public boolean isEliminated(String team) {
         if (team == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
-        return true;
+        return isTriviallyEliminated(team);
     }
 
     public Iterable<String> certificateOfElimination(String team) {
         if (team == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
-        return null;
+
+        return teams.keys();
+    }
+
+    private boolean isTriviallyEliminated(String team) {
+        int i = teams.get(team);
+        return wins[i] + remaining[i] < maxWins;
     }
 
     public int numberOfTeams() {
@@ -71,30 +81,29 @@ public class BaseballElimination {
 
     public int wins(String team) {
         if (team == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         return wins[teams.get(team)];
     }
 
     public int losses(String team) {
         if (team == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         return loses[teams.get(team)];
     }
 
     public int remaining(String team) {
         if (team == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         return remaining[teams.get(team)];
     }
 
     public int against(String team1, String team2) {
         if (team1 == null || team2 == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         return remainingAgainst[teams.get(team1)][teams.get(team2)];
     }
 }
-
