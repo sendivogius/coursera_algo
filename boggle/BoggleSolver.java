@@ -1,13 +1,15 @@
+import edu.princeton.cs.algs4.TrieST;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 
 public class BoggleSolver {
-    private HashSet<String> words;
+    private TrieST<Integer> words;
 
     public BoggleSolver(String[] dictionary) {
-        words = new HashSet<String>();
-        Collections.addAll(words, dictionary);
+        words = new TrieST<Integer>();
+        for (String w : dictionary) {
+            words.put(w, scoreWord(w));
+        }
     }
 
     // Returns the set of all valid words in the given Boggle board, as an Iterable.
@@ -17,11 +19,10 @@ public class BoggleSolver {
         return s;
     }
 
-    public int scoreOf(String word) {
-        int len = 0;
-        for (char c : word.toCharArray()) {
-            len += c == 'Q' ? 2 : 1;
-        }
+    private int scoreWord(String word) {
+        final int len = word.length();
+        if (len < 3)
+            return 0;
         if (len < 5)
             return 1;
         if (len == 5)
@@ -31,5 +32,11 @@ public class BoggleSolver {
         if (len == 7)
             return 5;
         return 11;
+    }
+
+    public int scoreOf(String word) {
+        if (words.contains(word))
+            return words.get(word);
+        return 0;
     }
 }
