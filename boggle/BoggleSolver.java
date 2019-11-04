@@ -1,23 +1,21 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.TST;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class BoggleSolver {
-    private final TST<Integer> words;
+    private final MyTrieST words;
 
     private BoggleBoard board;
     private HashSet<String> foundWords;
     private boolean[] visited;
     private int[][] neighbours;
-
-    private int rows;
     private int cols;
+    private int rows;
 
     public BoggleSolver(String[] dictionary) {
-        words = new TST<Integer>();
+        words = new MyTrieST();
 
         for (String w : dictionary) {
             if (w.length() > 2)
@@ -129,9 +127,7 @@ public class BoggleSolver {
 
 
     private boolean hasKeysWithPrefix(String currentWord) {
-        if (currentWord.length() > 2)
-            return words.keysWithPrefix(currentWord).iterator().hasNext();
-        return true;
+        return words.hasKeysWithPrefix(currentWord);
     }
 
     public int scoreOf(String word) {
