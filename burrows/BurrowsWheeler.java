@@ -20,49 +20,40 @@ public class BurrowsWheeler {
         BinaryStdOut.flush();
     }
 
-    private static char[] countsort(char[] array) {
-        int[] counts = new int[256];
-        char[] out = new char[array.length];
-        for (int i = 0; i < array.length; i++)
-            counts[array[i]]++;
-        for (int i = 1; i < counts.length; i++)
-            counts[i] += counts[i - 1];
-        for (int i = 0; i < array.length; i++) {
-            out[--counts[array[i]]] = array[i];
-        }
-        return out;
-    }
-
-
     public static void inverseTransform() {
         int first = BinaryStdIn.readInt();
         final String t = BinaryStdIn.readString();
 
         // final String t = "ARD!RCAAAABB";
         // int first = 3;
-        char[] chars = countsort(t.toCharArray());
-        final int n = chars.length;
 
-        // construct next array
-        int startInd = 0;
+        final int n = t.length();
+        char[] out = new char[n];
+
+        int[] counts = new int[256];
+        for (int i = 0; i < counts.length; i++)
+            counts[i] = 0;
+
+        for (int i = 0; i < n; i++)
+            counts[t.charAt(i)]++;
+
+        for (int i = 1; i < counts.length; i++)
+            counts[i] += counts[i - 1];
+
         int[] next = new int[n];
-        for (int i = 0; i < n; i++) {
-            char cc = chars[i];
-            if (i == 0 || chars[i - 1] != cc)
-                startInd = 0;
-            while (t.charAt(startInd) != cc) {
-                startInd++;
-            }
-            next[i] = startInd++;
+        for (int i = n - 1; i >= 0; i--) {
+            char cc = t.charAt(i);
+            int newPos = --counts[cc];
+            out[newPos] = cc;
+            next[newPos] = i;
         }
 
         // recover original
         for (int i = 0; i < n; i++) {
-            BinaryStdOut.write(chars[first]);
+            BinaryStdOut.write(out[first]);
             first = next[first];
         }
         BinaryStdOut.flush();
-
     }
 
     public static void main(String[] args) {
