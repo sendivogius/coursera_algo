@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c1e4f978-b3bd-4ae1-84e9-9e1170bce808" name="Default" comment="Implement CircularSuffixArray">
-      <change afterPath="$PROJECT_DIR$/BurrowsWheeler.java" afterDir="false" />
+    <list default="true" id="c1e4f978-b3bd-4ae1-84e9-9e1170bce808" name="Default" comment="Implement BurrowsWheeler transform">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BurrowsWheeler.java" beforeDir="false" afterPath="$PROJECT_DIR$/BurrowsWheeler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CircularSuffixArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/CircularSuffixArray.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,8 +65,7 @@
     <configuration name="BurrowsWheeler" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="BurrowsWheeler" />
       <module name="Algorithms, Part II" />
-      <option name="PROGRAM_PARAMETERS" value="-" />
-      <option name="REDIRECT_INPUT" value="true" />
+      <option name="PROGRAM_PARAMETERS" value="+" />
       <option name="INPUT_FILE" value="$PROJECT_DIR$/abra.txt" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -136,7 +137,14 @@
       <option name="project" value="LOCAL" />
       <updated>1577817979751</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Implement BurrowsWheeler transform">
+      <created>1577883816257</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1577883816257</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView">
@@ -166,13 +174,14 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Implement MoveToFront" />
     <MESSAGE value="Implement CircularSuffixArray" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement CircularSuffixArray" />
+    <MESSAGE value="Implement BurrowsWheeler transform" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement BurrowsWheeler transform" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="291" y="120" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1577882990214">
+    <state x="291" y="120" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1577902349883">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state x="291" y="120" key="#com.intellij.execution.impl.EditConfigurationsDialog/67.27.1533.873@67.27.1533.873" timestamp="1577882990214" />
+    <state x="291" y="120" key="#com.intellij.execution.impl.EditConfigurationsDialog/67.27.1533.873@67.27.1533.873" timestamp="1577902349883" />
     <state x="641" y="181" width="374" height="562" key="#com.intellij.ide.util.MemberChooser" timestamp="1577816246145">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
@@ -181,54 +190,54 @@
       <screen x="67" y="27" width="1533" height="873" />
     </state>
     <state x="701" y="166" width="254" height="593" key="#xdebugger.evaluate/67.27.1533.873@67.27.1533.873" timestamp="1577816643065" />
-    <state x="437" y="59" width="783" height="807" key="CommitChangelistDialog2" timestamp="1577817979460">
+    <state x="437" y="59" width="783" height="807" key="CommitChangelistDialog2" timestamp="1577883816121">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state x="437" y="59" width="783" height="807" key="CommitChangelistDialog2/67.27.1533.873@67.27.1533.873" timestamp="1577817979460" />
+    <state x="437" y="59" width="783" height="807" key="CommitChangelistDialog2/67.27.1533.873@67.27.1533.873" timestamp="1577883816121" />
     <state x="616" y="220" width="424" height="484" key="FileChooserDialogImpl" timestamp="1577816131982">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
     <state x="616" y="220" width="424" height="484" key="FileChooserDialogImpl/67.27.1533.873@67.27.1533.873" timestamp="1577816131982" />
-    <state width="1487" height="219" key="GridCell.Tab.0.bottom" timestamp="1577883793666">
+    <state width="1487" height="219" key="GridCell.Tab.0.bottom" timestamp="1577905926134">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state width="1487" height="219" key="GridCell.Tab.0.bottom/67.27.1533.873@67.27.1533.873" timestamp="1577883793666" />
-    <state width="1487" height="219" key="GridCell.Tab.0.center" timestamp="1577883793665">
+    <state width="1487" height="219" key="GridCell.Tab.0.bottom/67.27.1533.873@67.27.1533.873" timestamp="1577905926134" />
+    <state width="1487" height="219" key="GridCell.Tab.0.center" timestamp="1577905926132">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state width="1487" height="219" key="GridCell.Tab.0.center/67.27.1533.873@67.27.1533.873" timestamp="1577883793665" />
-    <state width="1487" height="219" key="GridCell.Tab.0.left" timestamp="1577883793665">
+    <state width="1487" height="219" key="GridCell.Tab.0.center/67.27.1533.873@67.27.1533.873" timestamp="1577905926132" />
+    <state width="1487" height="219" key="GridCell.Tab.0.left" timestamp="1577905926132">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state width="1487" height="219" key="GridCell.Tab.0.left/67.27.1533.873@67.27.1533.873" timestamp="1577883793665" />
-    <state width="1487" height="219" key="GridCell.Tab.0.right" timestamp="1577883793666">
+    <state width="1487" height="219" key="GridCell.Tab.0.left/67.27.1533.873@67.27.1533.873" timestamp="1577905926132" />
+    <state width="1487" height="219" key="GridCell.Tab.0.right" timestamp="1577905926133">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state width="1487" height="219" key="GridCell.Tab.0.right/67.27.1533.873@67.27.1533.873" timestamp="1577883793666" />
-    <state width="1487" height="272" key="GridCell.Tab.1.bottom" timestamp="1577883766601">
+    <state width="1487" height="219" key="GridCell.Tab.0.right/67.27.1533.873@67.27.1533.873" timestamp="1577905926133" />
+    <state width="1487" height="272" key="GridCell.Tab.1.bottom" timestamp="1577902923317">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state width="1487" height="272" key="GridCell.Tab.1.bottom/67.27.1533.873@67.27.1533.873" timestamp="1577883766601" />
-    <state width="1487" height="272" key="GridCell.Tab.1.center" timestamp="1577883766601">
+    <state width="1487" height="272" key="GridCell.Tab.1.bottom/67.27.1533.873@67.27.1533.873" timestamp="1577902923317" />
+    <state width="1487" height="272" key="GridCell.Tab.1.center" timestamp="1577902923317">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state width="1487" height="272" key="GridCell.Tab.1.center/67.27.1533.873@67.27.1533.873" timestamp="1577883766601" />
-    <state width="1487" height="272" key="GridCell.Tab.1.left" timestamp="1577883766600">
+    <state width="1487" height="272" key="GridCell.Tab.1.center/67.27.1533.873@67.27.1533.873" timestamp="1577902923317" />
+    <state width="1487" height="272" key="GridCell.Tab.1.left" timestamp="1577902923316">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state width="1487" height="272" key="GridCell.Tab.1.left/67.27.1533.873@67.27.1533.873" timestamp="1577883766600" />
-    <state width="1487" height="272" key="GridCell.Tab.1.right" timestamp="1577883766601">
+    <state width="1487" height="272" key="GridCell.Tab.1.left/67.27.1533.873@67.27.1533.873" timestamp="1577902923316" />
+    <state width="1487" height="272" key="GridCell.Tab.1.right" timestamp="1577902923317">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state width="1487" height="272" key="GridCell.Tab.1.right/67.27.1533.873@67.27.1533.873" timestamp="1577883766601" />
+    <state width="1487" height="272" key="GridCell.Tab.1.right/67.27.1533.873@67.27.1533.873" timestamp="1577902923317" />
     <state x="489" y="291" key="com.intellij.ide.util.TipDialog" timestamp="1577817926150">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
     <state x="489" y="291" key="com.intellij.ide.util.TipDialog/67.27.1533.873@67.27.1533.873" timestamp="1577817926150" />
-    <state x="497" y="108" width="672" height="676" key="search.everywhere.popup" timestamp="1577882588634">
+    <state x="497" y="108" width="672" height="676" key="search.everywhere.popup" timestamp="1577906453053">
       <screen x="67" y="27" width="1533" height="873" />
     </state>
-    <state x="497" y="108" width="672" height="676" key="search.everywhere.popup/67.27.1533.873@67.27.1533.873" timestamp="1577882588634" />
+    <state x="497" y="108" width="672" height="676" key="search.everywhere.popup/67.27.1533.873@67.27.1533.873" timestamp="1577906453053" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -240,13 +249,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/BurrowsWheeler.java</url>
-          <line>32</line>
+          <line>68</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/BurrowsWheeler.java</url>
           <line>11</line>
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/BurrowsWheeler.java</url>
+          <line>59</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

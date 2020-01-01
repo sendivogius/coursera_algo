@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class CircularSuffixArray {
-    class StringSuffixComparator implements Comparator<Integer> {
+    private class StringSuffixComparator implements Comparator<Integer> {
 
         public StringSuffixComparator() {
         }
@@ -21,22 +21,18 @@ public class CircularSuffixArray {
         }
     }
 
-    private String str;
-    private Integer[] suffixOrder;
+    private final String str;
+    private final Integer[] suffixOrder;
 
     public CircularSuffixArray(String s) {
         if (s == null)
             throw new IllegalArgumentException();
         str = s;
-        createIndexArray();
-        Arrays.sort(suffixOrder, new StringSuffixComparator());
-    }
-
-    private void createIndexArray() {
         suffixOrder = new Integer[length()];
         for (int i = 0; i < length(); i++) {
             suffixOrder[i] = i;
         }
+        Arrays.sort(suffixOrder, new StringSuffixComparator());
     }
 
     public int index(int i) {

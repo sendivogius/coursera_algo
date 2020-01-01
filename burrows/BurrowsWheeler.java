@@ -20,15 +20,51 @@ public class BurrowsWheeler {
         BinaryStdOut.flush();
     }
 
-    // apply Burrows-Wheeler inverse transform,
-    // reading from standard input and writing to standard output
-    public static void inverseTransform() {
+    private static char[] countsort(char[] array) {
+        int[] counts = new int[256];
+        char[] out = new char[array.length];
+        for (int i = 0; i < array.length; i++)
+            counts[array[i]]++;
+        for (int i = 1; i < counts.length; i++)
+            counts[i] += counts[i - 1];
+        for (int i = 0; i < array.length; i++) {
+            out[--counts[array[i]]] = array[i];
+        }
+        return out;
     }
 
-    ;
 
-    // if args[0] is "-", apply Burrows-Wheeler transform
-    // if args[0] is "+", apply Burrows-Wheeler inverse transform
+    public static void inverseTransform() {
+        int first = BinaryStdIn.readInt();
+        final String t = BinaryStdIn.readString();
+
+        // final String t = "ARD!RCAAAABB";
+        // int first = 3;
+        char[] chars = countsort(t.toCharArray());
+        final int n = chars.length;
+
+        // construct next array
+        int startInd = 0;
+        int[] next = new int[n];
+        for (int i = 0; i < n; i++) {
+            char cc = chars[i];
+            if (i == 0 || chars[i - 1] != cc)
+                startInd = 0;
+            while (t.charAt(startInd) != cc) {
+                startInd++;
+            }
+            next[i] = startInd++;
+        }
+
+        // recover original
+        for (int i = 0; i < n; i++) {
+            BinaryStdOut.write(chars[first]);
+            first = next[first];
+        }
+        BinaryStdOut.flush();
+
+    }
+
     public static void main(String[] args) {
         if (args[0].equals("-"))
             transform();
