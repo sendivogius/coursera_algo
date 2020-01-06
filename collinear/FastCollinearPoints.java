@@ -50,7 +50,7 @@ public class FastCollinearPoints {
                 }
             }
             if (n >= 3 && points[i].compareTo(pointsTemp[numPoints-n]) < 0) {
-                Point pEnd = pointsTemp[numPoits-1];
+                Point pEnd = pointsTemp[numPoints-1];
                 tempSegments.add(new LineSegment(points[i], pEnd));
             }
         }
